@@ -10,9 +10,7 @@ interface MarkdownProps {
 
 export const Markdown: React.FC<MarkdownProps> = ({ content, className }) => {
   return (
-    <div
-      className={`prose prose-neutral dark:prose-invert  ${className}`}
-    >
+    <div className={`prose prose-neutral dark:prose-invert  ${className}`}>
       <ReactMarkdown
         components={{
           h1: ({ ...props }) => (
@@ -34,10 +32,7 @@ export const Markdown: React.FC<MarkdownProps> = ({ content, className }) => {
             />
           ),
           p: ({ ...props }) => (
-            <p
-              className="leading-relaxed mb-4 text-foreground/80"
-              {...props}
-            />
+            <p className="leading-relaxed mb-4 text-foreground/80" {...props} />
           ),
           code({ children, className, ...rest }) {
             const match = /language-(\w+)/.exec(className || "");
@@ -78,6 +73,9 @@ export const Markdown: React.FC<MarkdownProps> = ({ content, className }) => {
             <li className="mb-2" {...props}>
               {children}
             </li>
+          ),
+          img: ({ ...props }) => (
+            <img className="max-w-full h-auto rounded-md" {...props} />
           ),
         }}
       >
