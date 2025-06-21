@@ -312,6 +312,98 @@ we can decode the message using \`publicKey\`
 All those transactions are stored in the \`blockchain\` and those transactions are recorded in the \`block\` and then we need to find a way to \`mine\` the \`block\` and find the \`nonce\` to make the \`block\` valid.
 
 [demo](https://andersbrownworth.com/blockchain/public-private-keys/blockchain)
+
+
+### My Approach
+
+\`\`\`js
+import crypto from "crypto";
+// 32-byte AES key (should be stored securely)
+const key = crypto.randomBytes(32); // You can persist this in secure storage
+
+// Encrypt
+function encrypt(text) {
+  const iv = crypto.randomBytes(16); // Generate new IV each time
+  const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+
+  let encrypted = cipher.update(text, "utf8", "hex");
+  encrypted += cipher.final("hex");
+
+  // Combine IV with encrypted text
+  const result = {
+    iv: iv.toString("hex"),
+    ciphertext: encrypted,
+  };
+
+  return result;
+}
+
+// Decrypt
+function decrypt({ ciphertext, iv }) {
+  const decipher = crypto.createDecipheriv(
+    "aes-256-cbc",
+    key,
+    Buffer.from(iv, "hex")
+  );
+
+  let decrypted = decipher.update(ciphertext, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+
+  return decrypted;
+}
+
+// asymmetric encryption
+// generate private public key pair
+const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
+  modulusLength: 4096,
+  publicKeyEncoding: {
+    type: "pkcs1",
+    format: "pem",
+  },
+  privateKeyEncoding: {
+    type: "pkcs1",
+    format: "pem",
+  },
+});
+
+// Encrypt with public key
+function encryptWithPublicKey(message, publicKey) {
+  const encrypted = crypto.publicEncrypt(publicKey, Buffer.from(message));
+  return encrypted.toString("base64");
+}
+
+function decryptWithPrivateKey(encrypted, privateKey) {
+  const decrypted = crypto.privateDecrypt(
+    privateKey,
+    Buffer.from(encrypted, "base64")
+  );
+  return decrypted.toString("utf8");
+}
+
+// const encryptedMessage = encryptWithPublicKey("Hello World!", publicKey);
+// const decryptedMessage = decryptWithPrivateKey(encryptedMessage, privateKey);
+
+// console.log("Encrypted message:", encryptedMessage);
+// console.log("Decrypted message:", decryptedMessage);
+
+// reversed usage
+
+const message = "Hello World!";
+
+const signer = crypto.createSign("sha256");
+signer.update(message);
+signer.end();
+const signature = signer.sign(privateKey, "hex");
+
+const verifier = crypto.createVerify("sha256");
+verifier.update(message);
+verifier.end();
+const isValid = verifier.verify(publicKey, signature, "hex");
+console.log(isValid)
+\`\`\`
+![image](https://github.com/user-attachments/assets/04c84be5-3c5f-4f13-ae5e-5e798d244f4d)
+
+
 `,eD=Object.freeze(Object.defineProperty({__proto__:null,default:FN},Symbol.toStringTag,{value:"Module"})),BN=`---
 title: "Is Docker Secretly Eating My Disk Space?"
 date: "2024-12-16"
