@@ -12,7 +12,7 @@ Let’s be honest — Docker is awesome, but sometimes it feels like a black box
 
 If you've ever had this paranoid thought:
 
-> *“Why is my C drive full even though I killed all my containers?”*
+> _“Why is my C drive full even though I killed all my containers?”_
 
 You're not alone. Killing a container with `docker kill <container_id>` **does not remove its data**, and that’s just the start of it.
 
@@ -24,15 +24,15 @@ Here’s what actually happens behind the scenes when you use Docker — and why
 
 ### 1. 🧱 Image Layers
 
-* Every `docker pull` or `docker build` action creates image layers.
-* These layers are **cached locally**, even after a container is stopped or deleted.
-* Multiple containers might share layers, but unused layers stick around unless removed manually.
+- Every `docker pull` or `docker build` action creates image layers.
+- These layers are **cached locally**, even after a container is stopped or deleted.
+- Multiple containers might share layers, but unused layers stick around unless removed manually.
 
 ### 2. 📦 Container Data (Writable Layers)
 
-* When you run a container, Docker creates a **writable layer** on top of the image.
-* It stores logs, runtime data, temporary files, etc.
-* Killing or stopping a container doesn’t delete this layer — it just marks it as “stopped.”
+- When you run a container, Docker creates a **writable layer** on top of the image.
+- It stores logs, runtime data, temporary files, etc.
+- Killing or stopping a container doesn’t delete this layer — it just marks it as “stopped.”
 
 ---
 
@@ -116,24 +116,25 @@ docker network prune
 
 ## 🛡️ Pro Tips to Keep Docker Clean
 
-* **Automate Cleanup:** Run a regular cron job or script to prune unused Docker resources.
-* **Use Docker Compose** for multi-container apps; it's easier to manage and clean up.
-* **Use Named Volumes** instead of anonymous ones so you can track and manage them better.
-* **Avoid \:latest in Production** – tagging images properly avoids accidental layer duplication.
-* **Understand Storage Drivers** (like Overlay2): the default driver might not suit your system’s performance or space requirements.
+- **Automate Cleanup:** Run a regular cron job or script to prune unused Docker resources.
+- **Use Docker Compose** for multi-container apps; it's easier to manage and clean up.
+- **Use Named Volumes** instead of anonymous ones so you can track and manage them better.
+- **Avoid \:latest in Production** – tagging images properly avoids accidental layer duplication.
+- **Understand Storage Drivers** (like Overlay2): the default driver might not suit your system’s performance or space requirements.
 
 ## 🔍 TL;DR
 
-| Dangling Images    | `docker image prune`     |
-| All Unused Images  | `docker image prune -a`  |
-| Stopped Containers | `docker container prune` |
-| Unused Volumes     | `docker volume prune`    |
-| Unused Networks    | `docker network prune`   |
-
+| Cleanup Command          | Docker Resources Removed |
+| ------------------------ | ------------------------ |
+| `docker image prune`     | Dangling Images          |
+| `docker image prune -a`  | All Unused Images        |
+| `docker container prune` | Stopped Containers       |
+| `docker volume prune`    | Unused Volumes           |
+| `docker network prune`   | Unused Networks          |
 
 ## ✅ Final Thoughts
 
-Docker isn’t secretly malicious — but it *is* quietly persistent.
+Docker isn’t secretly malicious — but it _is_ quietly persistent.
 If you're working on many projects or rebuilding images frequently, **periodic cleanup is essential** to avoid turning your machine into a landfill of containers and volumes.
 
 Stay paranoid. Stay clean. 🧼
@@ -144,4 +145,3 @@ docker system df
 ```
 
 It’ll show you exactly where Docker is hoarding your disk space.
-
