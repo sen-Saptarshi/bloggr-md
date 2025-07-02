@@ -247,3 +247,21 @@ So that's it upto HD wallets.
 Now we can try to make our own crypto wallet - if not a chrome extension, atleast a website.
 If not a fully functional wallet connected to a blockchain, atleast a Wallet Key pair generator.
 
+---
+
+### adhoc info
+Algorithm Used in Ethereum: `ECDSA` - sepk256k1 curve, `SHA256`
+
+`Keccak256`: Very similar to the `sha256` algorithm, output 256-bit hash value, pre-image resistant.
+[try-out](https://emn178.github.io/online-tools/keccak_256.html)
+
+Generating public key in ETH:
+
+1. a public key generated using the elliptic curve cryptography
+2. the public key is then hashed using `Keccak-256`
+3. we get a 32-byte hash.
+4. ETH address is derived from last 20 bytes of the hash output
+5. Final address: `'0x' + '{hex of the last 20 bytes}' `
+
+BIP - [Bitcoin Improvement Proposal](https://github.com/bitcoin/bips)
+
