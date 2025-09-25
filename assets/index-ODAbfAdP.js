@@ -565,6 +565,7 @@ Then:
 
 * Point your domain’s \`A record\` to the server’s public IP.
 * Keep your app running with **pm2** or **forever**.
+* use \`pm2 examples\` to know about its usage.
 
 ## SSL Certificates with Certbot
 
