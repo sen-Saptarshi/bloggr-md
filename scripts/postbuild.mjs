@@ -43,7 +43,7 @@ const template = readFileSync("dist/index.html", "utf8");
 // 1. Per-post route shells.
 for (const p of posts) {
   const url = `${BASE}/${p.slug}`;
-  const title = `${p.title} — ${SITE}`;
+  const title = `${p.title} - ${SITE}`;
 
   let html = template
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
