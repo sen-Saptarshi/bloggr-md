@@ -37,7 +37,7 @@ export const Markdown: React.FC<MarkdownProps> = ({ content, className }) => {
           p: ({ ...props }) => (
             <p className="leading-relaxed mb-4 text-foreground/80" {...props} />
           ),
-          code({ node, className, children, ...rest }) {
+          code({ className, children, ...rest }) {
             const match = /language-(\w+)/.exec(className || "");
             const codeString = String(children).replace(/\n$/, "");
 

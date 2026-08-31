@@ -1,40 +1,35 @@
 import fm from "front-matter";
 
-export async function fetchPosts(): Promise<Post[]> {
-  const modules = import.meta.glob("../posts/*.md", {
-    eager: true,
-    query: "?raw",
-    import: "default",
-  });
+// Single eager glob: every post is bundled as a raw string at build time.
+// Both fetchPosts() and getPostBySlug() read from this one source of truth.
+const modules = import.meta.glob("../posts/*.md", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+}) as Record<string, string>;
 
-  const posts = Object.entries(modules).map(([path, content]) => {
-    const parsed = fm<PostData>(content as string);
-    return {
-      attributes: parsed.attributes,
-      body: parsed.body,
-      path: path.replace("../posts/", "").replace(".md", ""),
-    };
-  });
-
-  return posts.sort(
-    (a, b) =>
-      new Date(b.attributes.date).getTime() -
-      new Date(a.attributes.date).getTime()
-  );
+function toPost(path: string, content: string): Post {
+  const parsed = fm<PostData>(content);
+  return {
+    attributes: parsed.attributes,
+    body: parsed.body,
+    path: path.replace("../posts/", "").replace(".md", ""),
+  };
 }
 
-// 🆕 Fetch a single post by slug
+export async function fetchPosts(): Promise<Post[]> {
+  return Object.entries(modules)
+    .map(([path, content]) => toPost(path, content))
+    .sort(
+      (a, b) =>
+        new Date(b.attributes.date).getTime() -
+        new Date(a.attributes.date).getTime()
+    );
+}
+
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  try {
-    const module = await import(`../posts/${slug}.md?raw`);
-    const parsed = fm<PostData>(module.default as string);
-    return {
-      attributes: parsed.attributes,
-      body: parsed.body,
-      path: slug,
-    };
-  } catch (err) {
-    console.error(`Failed to load post: ${slug}`, err);
-    return null;
-  }
+  const path = `../posts/${slug}.md`;
+  const content = modules[path];
+  if (!content) return null;
+  return toPost(path, content);
 }
