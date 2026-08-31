@@ -10,6 +10,7 @@ To develop the app, run the following commands:
 - `npm run dev` to start the development server
 - `npm run build` to build the app
 - `npm run preview` to preview the app
+- `npm run lint` to check for linting errors
 
 ## Deployment
 

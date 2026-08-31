@@ -4,16 +4,19 @@ import { BookAIcon } from "lucide-react";
 
 export default function Navbar() {
   return (
-    <>
-      <div className="flex items-center justify-between px-2 py-2 mx-auto max-w-200 md:max-w-4xl sticky top-0 z-50 bg-background/50 backdrop-blur-md">
-        <Link to="/">
-          <div className="text-3xl font-bold font-mono flex items-center">
-            <BookAIcon className="w-10 h-10" />
-            <h1>Blogs</h1>
-          </div>
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-foreground transition-colors hover:text-foreground/60"
+        >
+          <BookAIcon className="h-5 w-5" />
+          <span className="font-mono text-lg font-semibold tracking-tight">
+            Bloggr
+          </span>
         </Link>
         <ModeToggle />
       </div>
-    </>
+    </header>
   );
 }

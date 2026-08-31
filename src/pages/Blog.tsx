@@ -16,8 +16,14 @@ export default function BlogPost() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) return <h1>Loading...</h1>;
-  if (!post) return <h1>Post not found</h1>;
+  if (loading)
+    return (
+      <p className="mt-20 text-center text-muted-foreground">Loading...</p>
+    );
+  if (!post)
+    return (
+      <p className="mt-20 text-center text-muted-foreground">Post not found</p>
+    );
 
   return <PostDetail post={post} />;
 }

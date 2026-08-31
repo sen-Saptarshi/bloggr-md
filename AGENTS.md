@@ -27,8 +27,14 @@ Verify any code change with `npm run build && npm run lint` before considering i
   `import.meta.glob("../posts/*.md", { query: "?raw" })` shared by `fetchPosts()` and
   `getPostBySlug()`. **Do not** use dynamic `import()` with template variables for posts —
   Vite/Rollup cannot reliably analyze it with `?raw` query suffixes.
+- `src/lib/toc.ts` — `extractHeadings()` + `slugify()` powering the blog table of
+  contents. Heading `id`s in `Markdown.tsx` are slugified with the **same** function —
+  keep them in sync or TOC anchor scrolling breaks.
 - `src/pages/` — route pages (`Home`, `Blog`).
 - `src/components/` — React components; `components/ui/` holds shadcn-style primitives.
+- `src/components/TableOfContents.tsx` — scroll-spy TOC for the blog page. TOC items use
+  `<button>` + `scrollIntoView`, **never** `href="#..."`, because `HashRouter` owns the
+  URL hash — a plain anchor would break routing.
 - `src/components/Markdown.tsx` — custom `react-markdown` renderer (Prism highlighting,
   copy button, styled tables/links).
 - `src/types/index.d.ts` — **global ambient types** (`Post`, `PostData`).

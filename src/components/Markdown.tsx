@@ -4,11 +4,27 @@ import ReactMarkdown from "react-markdown";
 import { Prism } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
+import { slugify } from "@/lib/toc";
 
 interface MarkdownProps {
   content: string;
   className?: string;
 }
+
+// Recursively extracts plain text from react-markdown children so heading
+// ids can be slugified the same way the TOC extractor does.
+function getNodeText(node: React.ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(getNodeText).join("");
+  if (React.isValidElement(node)) {
+    return getNodeText((node.props as { children?: React.ReactNode }).children);
+  }
+  return "";
+}
+
+// scroll-mt keeps anchored headings clear of the sticky navbar.
+const headingClass = "scroll-mt-24 text-primary";
 
 export const Markdown: React.FC<MarkdownProps> = ({ content, className }) => {
   return (
@@ -16,23 +32,41 @@ export const Markdown: React.FC<MarkdownProps> = ({ content, className }) => {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          h1: ({ ...props }) => (
+          h1: ({ children, ...props }) => (
             <h1
-              className="text-3xl font-bold mt-6 mb-4 text-primary"
+              id={slugify(getNodeText(children))}
+              className={`${headingClass} text-3xl font-bold mt-6 mb-4`}
               {...props}
-            />
+            >
+              {children}
+            </h1>
           ),
-          h2: ({ ...props }) => (
+          h2: ({ children, ...props }) => (
             <h2
-              className="text-2xl font-semibold mt-5 mb-3 text-primary"
+              id={slugify(getNodeText(children))}
+              className={`${headingClass} text-2xl font-semibold mt-5 mb-3`}
               {...props}
-            />
+            >
+              {children}
+            </h2>
           ),
-          h3: ({ ...props }) => (
+          h3: ({ children, ...props }) => (
             <h3
-              className="text-xl font-semibold mt-4 mb-2 text-primary"
+              id={slugify(getNodeText(children))}
+              className={`${headingClass} text-xl font-semibold mt-4 mb-2`}
               {...props}
-            />
+            >
+              {children}
+            </h3>
+          ),
+          h4: ({ children, ...props }) => (
+            <h4
+              id={slugify(getNodeText(children))}
+              className={`${headingClass} text-lg font-semibold mt-4 mb-2`}
+              {...props}
+            >
+              {children}
+            </h4>
           ),
           p: ({ ...props }) => (
             <p className="leading-relaxed mb-4 text-foreground/80" {...props} />
