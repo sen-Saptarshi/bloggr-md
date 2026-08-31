@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://blog.saptdev.me/</loc><lastmod>2025-09-25</lastmod><changefreq>weekly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/deploy-in-aws</loc><lastmod>2025-09-25</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/how-web3-wallet-works</loc><lastmod>2025-06-29</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/cryptography-to-crypto</loc><lastmod>2025-06-20</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/react-to-nextjs-migrate</loc><lastmod>2025-06-18</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/password-hashing-cloudflare-workers</loc><lastmod>2025-01-10</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/docker-free-up</loc><lastmod>2024-12-16</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/my-custom-markdown</loc><lastmod>2024-10-15</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://blog.saptdev.me/modern-css</loc><lastmod>2024-01-20</lastmod><changefreq>monthly</changefreq></url>
+</urlset>
