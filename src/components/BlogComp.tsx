@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router";
-import { ArrowLeft, Calendar, ChevronDown, List, User } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronDown, Clock, List, User } from "lucide-react";
 import { Markdown } from "./Markdown";
 import TagList from "./TagList";
 import { TableOfContents } from "./TableOfContents";
@@ -88,6 +88,10 @@ export function PostDetail({ post }: PostDetailProps) {
                 <User className="h-3.5 w-3.5" />
                 {post.attributes.author}
               </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5" />
+                {post.readingTime} min read
+              </span>
             </p>
             <TagList tags={post.attributes.tags} />
 
@@ -105,7 +109,7 @@ export function PostDetail({ post }: PostDetailProps) {
             )}
           </header>
 
-          <Markdown content={post.body} />
+          <Markdown content={post.body} className="mt-8" />
         </article>
       </div>
     </div>

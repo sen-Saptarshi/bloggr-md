@@ -8,12 +8,16 @@ const modules = import.meta.glob("../posts/*.md", {
   import: "default",
 }) as Record<string, string>;
 
+const WORDS_PER_MINUTE = 140;
+
 function toPost(path: string, content: string): Post {
   const parsed = fm<PostData>(content);
+  const words = parsed.body.trim().split(/\s+/).length;
   return {
     attributes: parsed.attributes,
     body: parsed.body,
     path: path.replace("../posts/", "").replace(".md", ""),
+    readingTime: Math.max(1, Math.ceil(words / WORDS_PER_MINUTE)),
   };
 }
 

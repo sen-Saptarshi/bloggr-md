@@ -10,4 +10,6 @@ interface Post {
   attributes: PostData;
   body: string;
   path: string;
+  /** Estimated minutes to read, derived from the body's word count. */
+  readingTime: number;
 }

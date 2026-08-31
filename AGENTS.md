@@ -27,7 +27,8 @@ Verify any code change with `npm run build && npm run lint` before considering i
   `title`, `date`, `author`, `tags` (array), `description`.
 - `src/lib/posts.ts` — post loading. All posts are loaded through a single **eager**
   `import.meta.glob("../posts/*.md", { query: "?raw" })` shared by `fetchPosts()` and
-  `getPostBySlug()`. **Do not** use dynamic `import()` with template variables for posts —
+  `getPostBySlug()`. `readingTime` (min, from body word count) is computed here too.
+  **Do not** use dynamic `import()` with template variables for posts —
   Vite/Rollup cannot reliably analyze it with `?raw` query suffixes.
 - `src/lib/toc.ts` — `extractHeadings()` + `slugify()` powering the blog table of
   contents. Heading `id`s in `Markdown.tsx` are slugified with the **same** function —

@@ -32,7 +32,8 @@ export function PostList({ posts }: PostListProps) {
             <div className="mt-2">
               <p className="text-sm">
                 {post.attributes.date} ·{" "}
-                <span className="font-semibold">{post.attributes.author}</span>
+                <span className="font-semibold">{post.attributes.author}</span>{" "}
+                · {post.readingTime} min read
               </p>
               <TagList tags={post.attributes.tags} />
             </div>

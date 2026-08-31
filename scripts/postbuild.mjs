@@ -32,10 +32,15 @@ const setMeta = (html, key, value) =>
 
 const posts = readdirSync("src/posts")
   .filter((f) => f.endsWith(".md"))
-  .map((f) => ({
-    slug: f.replace(/\.md$/, ""),
-    ...fm(readFileSync(`src/posts/${f}`, "utf8")).attributes,
-  }))
+  .map((f) => {
+    const { attributes, body } = fm(readFileSync(`src/posts/${f}`, "utf8"));
+    const words = body.trim().split(/\s+/).length;
+    return {
+      slug: f.replace(/\.md$/, ""),
+      ...attributes,
+      readingTime: Math.max(1, Math.ceil(words / 140)), // 140 wpm
+    };
+  })
   .sort((a, b) => new Date(b.date) - new Date(a.date));
 
 const template = readFileSync("dist/index.html", "utf8");
@@ -67,6 +72,7 @@ for (const p of posts) {
       headline: p.title,
       description: p.description,
       datePublished: p.date,
+      timeRequired: `PT${p.readingTime}M`,
       author: { "@type": "Person", name: p.author },
       keywords: (p.tags ?? []).join(", "),
       mainEntityOfPage: url,
