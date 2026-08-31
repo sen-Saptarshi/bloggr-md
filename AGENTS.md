@@ -12,7 +12,9 @@ backend or CMS. It deploys to GitHub Pages (`blog.saptdev.me`) via the `gh-pages
 
 - `npm install` — install dependencies
 - `npm run dev` — start the Vite dev server
-- `npm run build` — production build (runs `tsc -b` first; **type errors fail the build**)
+- `npm run build` — production build (runs `tsc -b` first; **type errors fail the build**),
+  then `scripts/postbuild.mjs` generates per-post route shells (`dist/<slug>/index.html`
+  with meta baked in), `dist/404.html` (SPA fallback) and `dist/sitemap.xml`
 - `npm run lint` — ESLint
 - `npm run preview` — preview the production build locally
 - `npm run deploy` — builds, then pushes `dist/` to GitHub Pages
@@ -30,11 +32,17 @@ Verify any code change with `npm run build && npm run lint` before considering i
 - `src/lib/toc.ts` — `extractHeadings()` + `slugify()` powering the blog table of
   contents. Heading `id`s in `Markdown.tsx` are slugified with the **same** function —
   keep them in sync or TOC anchor scrolling breaks.
+- `src/lib/seo.ts` — `useSeo()` hook (page `<title>`, meta/OG/Twitter tags, canonical,
+  article JSON-LD). Every page should call it. Site constants (`SITE_NAME`, `BASE_URL`)
+  live here — keep `BASE_URL` in sync with `public/CNAME`.
+- `scripts/postbuild.mjs` — zero-dep post-build script (route shells + 404.html + sitemap),
+  runs at the end of `npm run build`. It regex-swaps meta values in `dist/index.html`, so
+  **keep every meta tag in `index.html` on a single line**.
+- `public/robots.txt` — allows all crawlers, points at the sitemap.
 - `src/pages/` — route pages (`Home`, `Blog`).
 - `src/components/` — React components; `components/ui/` holds shadcn-style primitives.
 - `src/components/TableOfContents.tsx` — scroll-spy TOC for the blog page. TOC items use
-  `<button>` + `scrollIntoView`, **never** `href="#..."`, because `HashRouter` owns the
-  URL hash — a plain anchor would break routing.
+  `<button>` + `scrollIntoView` (smooth scroll), not `href="#..."` anchors.
 - `src/components/Markdown.tsx` — custom `react-markdown` renderer (Prism highlighting,
   copy button, styled tables/links).
 - `src/types/index.d.ts` — **global ambient types** (`Post`, `PostData`).
@@ -45,11 +53,14 @@ Verify any code change with `npm run build && npm run lint` before considering i
 - Path alias `@` maps to `./src` (see `vite.config.ts` / `tsconfig.app.json`).
 - Styling is **Tailwind CSS v4** via the `@tailwindcss/vite` plugin — there is no
   `tailwind.config.js`; theme tokens live in `src/index.css`.
-- Routing uses `HashRouter` (`src/main.tsx`). This is **required** for GitHub Pages so
-  deep links survive refreshes — do not switch to `BrowserRouter`.
+- Routing uses `BrowserRouter` (`src/main.tsx`). Deep links survive GitHub Pages refreshes
+  because the build emits a static shell per post route (`dist/blog/<slug>/index.html`)
+  plus a `404.html` fallback — do **not** remove `scripts/postbuild.mjs` from the build.
+  A shim in `main.tsx` redirects legacy `/#/...` links. Do not switch back to `HashRouter`
+  (it breaks per-post SEO/social cards).
 - Default theme is dark (`ThemeProvider defaultTheme="dark"`).
 - Adding a post = drop a `.md` file with valid frontmatter into `src/posts/`. No other
-  registration is needed; the filename (minus `.md`) becomes the URL slug (`/blog/<slug>`).
+  registration is needed; the filename (minus `.md`) becomes the URL slug (`/<slug>`).
 
 ## Deployment
 

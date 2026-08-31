@@ -2,11 +2,26 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router"; // or other router
 import { getPostBySlug } from "../lib/posts";
 import { PostDetail } from "@/components/BlogComp";
+import { useSeo } from "@/lib/seo";
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useSeo(
+    post
+      ? {
+          title: post.attributes.title,
+          description: post.attributes.description,
+          path: `/${post.path}`,
+          type: "article",
+          publishedTime: post.attributes.date,
+          author: post.attributes.author,
+          tags: post.attributes.tags,
+        }
+      : {}
+  );
 
   useEffect(() => {
     if (!slug) return;

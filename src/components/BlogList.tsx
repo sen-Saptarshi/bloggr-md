@@ -16,7 +16,7 @@ export function PostList({ posts }: PostListProps) {
 
         return (
           <li key={post.path} className="flex flex-col border-b-2 pb-2">
-            <Link to={`/blog/${post.path}`} className="flex items-center">
+            <Link to={`/${post.path}`} className="flex items-center">
               <h2 className="text-2xl cursor-pointer hover:underline">
                 {post.attributes.title}
               </h2>

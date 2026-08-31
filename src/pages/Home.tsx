@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { PostList } from "@/components/BlogList";
 import { fetchPosts } from "@/lib/posts";
 import { SearchComponent } from "@/components/Search";
+import { useSeo } from "@/lib/seo";
 
 export default function Home() {
   const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useSeo({}); // site-wide defaults
 
   useEffect(() => {
     fetchPosts()
